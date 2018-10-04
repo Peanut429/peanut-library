@@ -9,12 +9,12 @@ app.$mount()
 export default {
   config: {
     pages: [
-      '^pages/me/main'
+      '^pages/books/main'
     ],
     window: {
       'backgroundTextStyle': 'light',
       'navigationBarBackgroundColor': '#e4393c',
-      'navigationBarTitleTex': '花生图书',
+      'navigationBarTitleText': '花生图书',
       'navigationBarTextStyle': 'light'
     },
     'tabBar': {

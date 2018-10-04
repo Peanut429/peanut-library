@@ -11,7 +11,7 @@
     </div>
 </template>
 <script>
-import { showSuccess, showModal } from '@/util'
+import { showSuccess, showModal, post } from '@/util'
 import qcloud from 'wafer2-client-sdk'
 import config from '@/config.js'
 
@@ -29,10 +29,19 @@ export default {
     }
   },
   methods: {
+    async addBook (isbn) {
+      const res = await post('/weapp/addbook', {
+        isbn,
+        openid: this.userinfo.openId
+      })
+      showModal('添加成功', `${res.title}添加成功`)
+    },
     scanBook () {
       wx.scanCode({
-        success: function (res) {
-          console.log(res)
+        success: (res) => {
+          if (res.result) {
+            this.addBook(res.result)
+          }
         }
       })
     },
@@ -76,7 +85,7 @@ export default {
       const self = this
       wx.getSetting({
         success: function (res) {
-          console.log(res)
+          console.log('getSetting-success:', res)
           if (res.authSetting['scope.userInfo']) {
             wx.checkSession({
               success: function () {
@@ -84,6 +93,7 @@ export default {
                 showSuccess('登录成功')
               },
               fail: function () {
+                console.log('e', e)
                 console.log('fail')
                 qcloud.clearSession()
                 var options = {
